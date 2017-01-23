@@ -1,0 +1,26 @@
+{
+  "name": "wikistack",
+  "version": "1.0.0",
+  "description": "Wikipedia Clone",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexkaralanian/wikistack.git"
+  },
+  "author": "Alex Karalanian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexkaralanian/wikistack/issues"
+  },
+  "homepage": "https://github.com/alexkaralanian/wikistack#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "nunjucks": "^3.0.0"
+  }
+}
