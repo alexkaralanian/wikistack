@@ -1,26 +1,55 @@
+// Dependencies
+
 const express = require('express');
-const app = express();
 const morgan = require('morgan')
 const bodyParser = require('body-parser');
-const routes = require ('./routes')
 const nunjucks = require('nunjucks')
+const path = require('path')
+const routes = require ('./routes/wiki')
+const models = require('./models')
+const app = express();
 
-const logger = morgan('dev')
-app.use(logger)
+// Views
+var env = nunjucks.configure('views', { noCache: true })
+app.set('view engine', 'html')
+app.engine('html', nunjucks.render)
 
+// Controller
+app.use(morgan('dev'))
+app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use('/wiki', routes)
 
-app.engine('html', nunjucks.render)
-app.set('view engine', 'html')
 
-nunjucks.configure('views', { noCache: true })
 
-nunjucks.render('index.html', function(err, res){
+// Routes (Index) //
+
+app.get('/', function(req, res, next){
+    res.render('index')
+});
+
+
+// Error Handler //
+app.use(function(err, req, res, next){
+    console.error(err)
+    res.status(500).send(err.message); // 500 Internal Server Error
+
 })
 
-app.use(routes)
 
-app.listen(3000, function(){
-    console.log('Listening on port 3000')
-});
+// Models //
+
+var Page = models.Page
+var User = models.User
+
+User.sync()
+    .then(function(){
+        return Page.sync({force: false})
+    })
+    .then(function(){
+        app.listen(3000, function(){
+        console.log('Listening on port 3000!')
+    });
+})
+.catch(console.error);
